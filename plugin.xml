@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <plugin id="com.jkt.zebra.barcode.plugin" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
 	<name>ZebraBarcodePlugin</name>
+	<repo>https://github.com/tuanway/zebra.git</repo>
 	<js-module name="ZebraBarcodePlugin" src="www/ZebraBarcodePlugin.js">
 		<clobbers target="zebraBarcodePlugin" />
 	</js-module>
