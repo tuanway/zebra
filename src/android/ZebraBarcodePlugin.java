@@ -90,14 +90,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                     }
                 });
             }
-        } else if (action.equals("enableReading")) {
-            Log.d(LOG_TAG, "enable scanner");
-            cordova.getThreadPool().execute(new Runnable() {
-                public void run() {
-                    scanner.enable();
-                }
-            });
-        }else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
+        } else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
             Log.d(LOG_TAG, "Start soft read");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
@@ -189,6 +182,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
             try {
+                scanner.enable();
                 if (scanner.isReadPending()) {
                     Log.e(LOG_TAG, "Cancel pending read");
                     scanner.cancelRead();
