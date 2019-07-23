@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.jkt.zebra.barcode.plugin" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+	<name>ZebraBarcodePlugin</name>
+	<js-module name="ZebraBarcodePlugin" src="www/ZebraBarcodePlugin.js">
+		<clobbers target="zebraBarcodePlugin" />
+	</js-module>
+	<platform name="android">
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="ZebraBarcodePlugin">
+				<param name="android-package" value="com.jkt.zebra.barcode.plugin.ZebraBarcodePlugin" />
+			</feature>
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest">
+			<uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+		</config-file>
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<uses-library android:name="com.symbol.emdk" android:required="false" />
+		</config-file>
+		<framework src="src/android/extras.gradle" custom="true" type="gradleReference" />
+		<source-file src="src/android/ZebraBarcodePlugin.java" target-dir="src/com/jkt/zebra/barcode/plugin" />
+		<source-file src="src/android/com.symbol.emdk.jar" target-dir="lib" />
+	</platform>
+</plugin>
