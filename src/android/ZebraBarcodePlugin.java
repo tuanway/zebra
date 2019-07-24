@@ -223,18 +223,19 @@ if (scanner == null || !scanner.isEnabled()) {
 private void deInitScanner() {
 
 // if (scanner != null) {
-    try {
-        scanner.cancelRead();
-        scanner.removeDataListener(this);
-        scanner.removeStatusListener(this);
-        scanner.disable();
+    // try {
+    //     scanner.cancelRead();
+    //     scanner.removeDataListener(this);
+    //     scanner.removeStatusListener(this);
+    //     scanner.disable();
 
-    } catch (ScannerException e) {
-        Log.i(LOG_TAG, "Status: " + e.getMessage());
-    }
-    scanner = null;
+    // } catch (ScannerException e) {
+    //     Log.i(LOG_TAG, "Status: " + e.getMessage());
+    // }
+    // scanner = null;
 // }
 
+    onClosed();
 
 }
 
