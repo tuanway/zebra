@@ -240,8 +240,7 @@ if (scanner != null) {
         scanner.disable();
 
     } catch (ScannerException e) {
-        // TODO Auto-generated catch block
-        statusTextView.setText("Status: " + e.getMessage());
+        Log.i(LOG_TAG, "Status: " + e.getMessage());
     }
     scanner = null;
 }
