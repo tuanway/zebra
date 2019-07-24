@@ -45,4 +45,13 @@ ZebraBarcodePlugin.prototype.enableReading = function () {
 	exec(function () {}, function () {}, "ZebraBarcodePlugin", "enableReading", []);
 };
 
+ZebraBarcodePlugin.prototype.init = function () {
+	exec(function () {}, function () {}, "ZebraBarcodePlugin", "init", []);
+};
+
+ZebraBarcodePlugin.prototype.deinit = function () {
+	exec(function () {}, function () {}, "ZebraBarcodePlugin", "de_init", []);
+};
+
+
 module.exports = new ZebraBarcodePlugin();

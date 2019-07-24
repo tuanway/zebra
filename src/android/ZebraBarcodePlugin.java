@@ -43,6 +43,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     private static String START_SOFT_KEY = "startSoftKeyRead";
     private static String START_HARD_KEY = "startHardKeyRead";
     private static String STOP_READING = "stopReading";
+    private static String INIT = "init";
+    private static String DE_INIT = "de_init";
 
     public ZebraBarcodePlugin() {
     }
@@ -90,7 +92,21 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                     }
                 });
             }
-        } else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
+        } else if (action.equalsIgnoreCase(DE_INIT)) {
+            Log.d(LOG_TAG, "DE_INIT SCANNER");
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    deInitScanner();
+                }
+            });
+        } else if (action.equalsIgnoreCase(INIT)) {
+            Log.d(LOG_TAG, "INIT SCANNER");
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    initializeScanner();
+                }
+            });
+        }else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
             Log.d(LOG_TAG, "Start soft read");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
@@ -168,6 +184,57 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         }
     }
 
+// Method to initialize and enable Scanner and its listeners
+private void initializeScanner() throws ScannerException {
+
+if (deviceList.size() != 0) {
+    scanner = barcodeManager.getDevice(deviceList.get(scannerIndex));
+} else {
+    statusTextView
+            .setText("Status: "
+                    + "Failed to get the specified scanner device! Please close and restart the application.");
+}
+
+if (scanner != null) {
+
+    // Add data and status listeners
+    scanner.addDataListener(this);
+    scanner.addStatusListener(this);
+
+    try {
+        // Enable the scanner
+        scanner.enable();
+
+    } catch (ScannerException e) {
+        // TODO Auto-generated catch block
+        statusTextView.setText("Status: " + e.getMessage());
+    }
+}
+
+
+}
+
+// Disable the scanner instance
+private void deInitScanner() {
+
+if (scanner != null) {
+    try {
+        scanner.cancelRead();
+
+        scanner.removeDataListener(this);
+        scanner.removeStatusListener(this);
+        scanner.disable();
+
+    } catch (ScannerException e) {
+        // TODO Auto-generated catch block
+        statusTextView.setText("Status: " + e.getMessage());
+    }
+    scanner = null;
+}
+
+
+}
+
     // necessary to be compliant with the EMDKListener interface
     @Override
     public void onClosed() {
@@ -181,8 +248,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     private void StartReadingBarcode(String type, CallbackContext callbackContext) {
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
-            try {
-                scanner.enable();
+            try {                
                 if (scanner.isReadPending()) {
                     Log.e(LOG_TAG, "Cancel pending read");
                     scanner.cancelRead();
@@ -210,8 +276,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         scanCallbackContext = null;
         if (scanner != null && scanner.isReadPending()) {
             try {
-                scanner.cancelRead();
-                scanner.disable();
+                scanner.cancelRead();                
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "Error stopping read");
             }
@@ -245,7 +310,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         }
     }
 
-    // Scanner gos to IDLE state after some seconds -> restart / revive read process
+    // Scanner goes to IDLE state after some seconds -> restart / revive read process
     @Override
     public void onStatus(StatusData statusData) {
         StatusData.ScannerStates state = statusData.getState();
