@@ -186,28 +186,29 @@ if (scanner == null || !scanner.isEnabled()) {
 
 // Method to initialize and enable Scanner and its listeners
     private void initializeScanner() {
-    BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+    // BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
-    // scanner
-    List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
-    Iterator<ScannerInfo> it = scannersOnDevice.iterator();
-    ScannerInfo scannerToActivate = null;
-    while (it.hasNext()) {
-        ScannerInfo scnInfo = it.next();
-        if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
-            scannerToActivate = scnInfo;
-            break;
-        }
-    }
-    scanner = barcodeManager.getDevice(scannerToActivate);
+    // // scanner
+    // List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
+    // Iterator<ScannerInfo> it = scannersOnDevice.iterator();
+    // ScannerInfo scannerToActivate = null;
+    // while (it.hasNext()) {
+    //     ScannerInfo scnInfo = it.next();
+    //     if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
+    //         scannerToActivate = scnInfo;
+    //         break;
+    //     }
+    // }
+    // scanner = barcodeManager.getDevice(scannerToActivate);
 
-    if (scanner != null && !scanner.isEnabled()) {
+    // if (scanner != null && !scanner.isEnabled()) {
 
-        // Add data and status listeners
-        scanner.addDataListener(this);
-        scanner.addStatusListener(this);
+
 
         try {
+            // Add data and status listeners
+            scanner.addDataListener(this);
+            scanner.addStatusListener(this);
             // Enable the scanner
             scanner.enable();
 
@@ -222,10 +223,9 @@ if (scanner == null || !scanner.isEnabled()) {
 // Disable the scanner instance
 private void deInitScanner() {
 
-if (scanner != null) {
+// if (scanner != null) {
     try {
         scanner.cancelRead();
-
         scanner.removeDataListener(this);
         scanner.removeStatusListener(this);
         scanner.disable();
@@ -233,8 +233,8 @@ if (scanner != null) {
     } catch (ScannerException e) {
         Log.i(LOG_TAG, "Status: " + e.getMessage());
     }
-    scanner = null;
-}
+    // scanner = null;
+// }
 
 
 }
