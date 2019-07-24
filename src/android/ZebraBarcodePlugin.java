@@ -239,8 +239,8 @@ if (scanner != null) {
 
 }
 
-@Override
-protected void onStop() {
+    @Override
+public void onStop() {
     super.onStop();
     deInitScanner();
 }
