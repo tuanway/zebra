@@ -201,7 +201,7 @@ if (scanner == null || !scanner.isEnabled()) {
     }
     scanner = barcodeManager.getDevice(scannerToActivate);
 
-    if (scanner != null) {
+    if (scanner != null && !scanner.isEnabled()) {
 
         // Add data and status listeners
         scanner.addDataListener(this);
