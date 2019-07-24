@@ -204,9 +204,10 @@ if (scanner == null || !scanner.isEnabled()) {
     // if (scanner != null && !scanner.isEnabled()) {
 
         try {
+            // scanner.cancelRead();
             // Add data and status listeners
-            scanner.addDataListener(this);
-            scanner.addStatusListener(this);
+            // scanner.addDataListener(this);
+            // scanner.addStatusListener(this);
             // Enable the scanner
             scanner.enable();
 
@@ -231,7 +232,7 @@ private void deInitScanner() {
     } catch (ScannerException e) {
         Log.i(LOG_TAG, "Status: " + e.getMessage());
     }
-    // scanner = null;
+    scanner = null;
 // }
 
 
