@@ -43,8 +43,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     private static String START_SOFT_KEY = "startSoftKeyRead";
     private static String START_HARD_KEY = "startHardKeyRead";
     private static String STOP_READING = "stopReading";
-    private static String INIT = "init";
-    private static String DE_INIT = "de_init";
+    private static String RE_INIT = "reinit";
+    private static String DE_INIT = "deinit";
 
     public ZebraBarcodePlugin() {
     }
@@ -100,7 +100,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                 }
             });
         } else if (action.equalsIgnoreCase(INIT)) {
-            Log.d(LOG_TAG, "INIT SCANNER");
+            Log.d(LOG_TAG, "RE_INIT SCANNER");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     initializeScanner();
