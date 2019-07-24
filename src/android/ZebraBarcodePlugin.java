@@ -185,7 +185,7 @@ if (scanner == null || !scanner.isEnabled()) {
     }
 
 // Method to initialize and enable Scanner and its listeners
-private void initializeScanner() throws ScannerException {
+private void initializeScanner() {
 
  if (scanner == null || !scanner.isEnabled()) {
             Log.i(LOG_TAG, "Initializing EMDKManager");
