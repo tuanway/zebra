@@ -200,7 +200,7 @@ if (scanner == null || !scanner.isEnabled()) {
         }
     }
     scanner = barcodeManager.getDevice(scannerToActivate);
-    
+
     if (scanner != null) {
 
         // Add data and status listeners
@@ -239,12 +239,18 @@ if (scanner != null) {
 
 }
 
+@Override
+protected void onStop() {
+    super.onStop();
+    deInitScanner();
+}
+
     // necessary to be compliant with the EMDKListener interface
     @Override
 public void onClosed() {
-if (this.emdkManager != null) {
-        this.emdkManager.release();
-        this.emdkManager = null;
+if (emdkManager != null) {
+        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+        emdkManager = null;
     }
 }
 
