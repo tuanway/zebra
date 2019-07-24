@@ -203,8 +203,6 @@ if (scanner == null || !scanner.isEnabled()) {
 
     // if (scanner != null && !scanner.isEnabled()) {
 
-
-
         try {
             // Add data and status listeners
             scanner.addDataListener(this);
@@ -215,7 +213,7 @@ if (scanner == null || !scanner.isEnabled()) {
         } catch (ScannerException e) {
              Log.i(LOG_TAG, "Status: " + e.getMessage());
         }
-    }
+    // }
 
 
 }
