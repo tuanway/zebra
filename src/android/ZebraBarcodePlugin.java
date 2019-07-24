@@ -185,45 +185,36 @@ if (scanner == null || !scanner.isEnabled()) {
     }
 
 // Method to initialize and enable Scanner and its listeners
-private void initializeScanner() {
+    private void initializeScanner() {
+    BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
- if (scanner == null || !scanner.isEnabled()) {
-            Log.i(LOG_TAG, "Initializing EMDKManager");
-
-            BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
-
-            // scanner
-            List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
-            Iterator<ScannerInfo> it = scannersOnDevice.iterator();
-            ScannerInfo scannerToActivate = null;
-            while (it.hasNext()) {
-                ScannerInfo scnInfo = it.next();
-                if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
-                    scannerToActivate = scnInfo;
-                    break;
-                }
-            }
-            scanner = barcodeManager.getDevice(scannerToActivate);
-            scanner.addDataListener(this);
-            scanner.addStatusListener(this);
-
-            try {
-                scanner.enable();
-
-                Log.i(LOG_TAG, "Scanner enabled");
-                if (initialisationCallbackContext != null) {
-                    initialisationCallbackContext.success();
-                    initialisationCallbackContext = null;
-                }
-            } catch (ScannerException e) {
-                Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
-                if (initialisationCallbackContext != null) {
-                    OnScanFailCallback(initialisationCallbackContext, "Error in enabling Scanner: " + e.getMessage());
-                }
-            }
-        } else {
-            Log.i(LOG_TAG, "Already initialized");
+    // scanner
+    List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
+    Iterator<ScannerInfo> it = scannersOnDevice.iterator();
+    ScannerInfo scannerToActivate = null;
+    while (it.hasNext()) {
+        ScannerInfo scnInfo = it.next();
+        if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
+            scannerToActivate = scnInfo;
+            break;
         }
+    }
+    scanner = barcodeManager.getDevice(scannerToActivate);
+    
+    if (scanner != null) {
+
+        // Add data and status listeners
+        scanner.addDataListener(this);
+        scanner.addStatusListener(this);
+
+        try {
+            // Enable the scanner
+            scanner.enable();
+
+        } catch (ScannerException e) {
+             Log.i(LOG_TAG, "Status: " + e.getMessage());
+        }
+    }
 
 
 }
@@ -250,8 +241,12 @@ if (scanner != null) {
 
     // necessary to be compliant with the EMDKListener interface
     @Override
-    public void onClosed() {
+public void onClosed() {
+if (this.emdkManager != null) {
+        this.emdkManager.release();
+        this.emdkManager = null;
     }
+}
 
 
     //------------------------------------------------------------------------------------------------------------------
