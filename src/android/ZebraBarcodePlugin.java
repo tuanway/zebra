@@ -190,8 +190,6 @@ private void initializeScanner() throws ScannerException {
  if (scanner == null || !scanner.isEnabled()) {
             Log.i(LOG_TAG, "Initializing EMDKManager");
 
-            // managers
-            emdkManager = manager;
             BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
             // scanner
