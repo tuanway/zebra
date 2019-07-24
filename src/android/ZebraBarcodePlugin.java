@@ -43,7 +43,6 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     private static String START_SOFT_KEY = "startSoftKeyRead";
     private static String START_HARD_KEY = "startHardKeyRead";
     private static String STOP_READING = "stopReading";
-    private static String RE_INIT = "reinit";
     private static String DE_INIT = "deinit";
 
     public ZebraBarcodePlugin() {
@@ -95,18 +94,11 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         } else if (action.equalsIgnoreCase(DE_INIT)) {
             Log.d(LOG_TAG, "DE_INIT SCANNER");
             cordova.getThreadPool().execute(new Runnable() {
-                public void run() {
-                    deInitScanner();
+                public void run() {                    
+                    onClosed();
                 }
             });
-        } else if (action.equalsIgnoreCase(RE_INIT)) {
-            Log.d(LOG_TAG, "RE_INIT SCANNER");
-            cordova.getThreadPool().execute(new Runnable() {
-                public void run() {
-                    initializeScanner();
-                }
-            });
-        }else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
+        } else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
             Log.d(LOG_TAG, "Start soft read");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
@@ -183,61 +175,6 @@ if (scanner == null || !scanner.isEnabled()) {
         }
        
     }
-
-// Method to initialize and enable Scanner and its listeners
-    private void initializeScanner() {
-    // BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
-
-    // // scanner
-    // List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
-    // Iterator<ScannerInfo> it = scannersOnDevice.iterator();
-    // ScannerInfo scannerToActivate = null;
-    // while (it.hasNext()) {
-    //     ScannerInfo scnInfo = it.next();
-    //     if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
-    //         scannerToActivate = scnInfo;
-    //         break;
-    //     }
-    // }
-    // scanner = barcodeManager.getDevice(scannerToActivate);
-
-    // if (scanner != null && !scanner.isEnabled()) {
-
-        try {
-            // scanner.cancelRead();
-            // Add data and status listeners
-            // scanner.addDataListener(this);
-            // scanner.addStatusListener(this);
-            // Enable the scanner
-            scanner.enable();
-
-        } catch (ScannerException e) {
-             Log.i(LOG_TAG, "Status: " + e.getMessage());
-        }
-    // }
-
-
-}
-
-// Disable the scanner instance
-private void deInitScanner() {
-
-// if (scanner != null) {
-    // try {
-    //     scanner.cancelRead();
-    //     scanner.removeDataListener(this);
-    //     scanner.removeStatusListener(this);
-    //     scanner.disable();
-
-    // } catch (ScannerException e) {
-    //     Log.i(LOG_TAG, "Status: " + e.getMessage());
-    // }
-    // scanner = null;
-// }
-
-    onClosed();
-
-}
 
     @Override
 public void onStop() {
