@@ -179,7 +179,7 @@ if (scanner == null || !scanner.isEnabled()) {
     @Override
 public void onStop() {
     super.onStop();
-    deInitScanner();
+    onClosed();
 }
 
     // necessary to be compliant with the EMDKListener interface
