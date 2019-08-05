@@ -169,8 +169,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         scanner.disable();
         scanner.release();
         scanner = null;
-
-        onClosed();
+        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
     }
   } catch (ScannerException e) {
     e.printStackTrace();
