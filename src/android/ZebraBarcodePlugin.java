@@ -308,8 +308,7 @@ if (scanner == null || !scanner.isEnabled()) {
         }
 }
 
-    private void StartReadingBarcode(String type, CallbackContext callbackContext) {        
-        try{Thread.sleep(1000);}catch(InterruptedException e){}   
+    private void StartReadingBarcode(String type, CallbackContext callbackContext) {                
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
             try {                
