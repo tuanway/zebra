@@ -35,6 +35,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     private static final String LOG_TAG = "ZebraBarcodePlugin";
 
     private EMDKManager emdkManager = null;             ///<  If the EMDK is available for scanning, this property will be non-null
+    private BarcodeManager barcodeManager = null;
     private Scanner scanner = null;                         ///<  The scanner currently in use
     private CallbackContext initialisationCallbackContext = null;   ///<  The Cordova callback for our first plugin initialisation
     private CallbackContext scanCallbackContext = null;     ///<  The Cordova callback context for each scan
@@ -59,7 +60,50 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
         if (emdkManager != null) {
             Log.w(LOG_TAG, "Destroy scanner");
-            emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+            emdkManager.release();
+            emdkManager = null;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // The application is in background
+        
+        // De-initialize scanner
+        deInitScanner();
+        
+        // Remove connection listener
+        if (barcodeManager != null) {
+            barcodeManager.removeConnectionListener(this);
+            barcodeManager = null;
+            deviceList = null;
+        }
+        
+        // Release the barcode manager resources
+        if (emdkManager != null) {
+            emdkManager.release(FEATURE_TYPE.BARCODE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // The application is in foreground 
+        
+        // Acquire the barcode manager resources
+        if (emdkManager != null) {
+            barcodeManager = (BarcodeManager) emdkManager.getInstance(FEATURE_TYPE.BARCODE);
+            
+            // Add connection listener
+            if (barcodeManager != null) {
+                barcodeManager.addConnectionListener(this);
+            }        
+            
+            // Initialize scanner
+            initScanner();
+            setTrigger();
+            setDecoders();
         }
     }
 
@@ -178,51 +222,62 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     @Override
     public void onClosed() {
-    /* EMDKManager is closed abruptly. Call EmdkManager.release() to free the resources used by the current EMDK instance. */   
+    if (emdkManager != null) {
+            
+            // Remove connection listener
+            if (barcodeManager != null){
+                barcodeManager.removeConnectionListener(this);
+                barcodeManager = null;
+            }
+            
+            // Release all the resources
+            emdkManager.release();
+            emdkManager = null; 
+        }
     }
 
     @Override
     public void onOpened(EMDKManager manager) {
         Log.i(LOG_TAG, "EMDKManager onOpened Method Called");
-// if (scanner == null || !scanner.isEnabled()) {
-            // Log.i(LOG_TAG, "Initializing EMDKManager");
+if (scanner == null || !scanner.isEnabled()) {
+            Log.i(LOG_TAG, "Initializing EMDKManager");
 
             // managers
             emdkManager = manager;            
-        //     BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+            barcodeManager = (BarcodeManager) emdkManager.getInstance(FEATURE_TYPE.BARCODE);
 
-        //     // scanner
-        //     List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
-        //     Iterator<ScannerInfo> it = scannersOnDevice.iterator();
-        //     ScannerInfo scannerToActivate = null;
-        //     while (it.hasNext()) {
-        //         ScannerInfo scnInfo = it.next();
-        //         if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
-        //             scannerToActivate = scnInfo;
-        //             break;
-        //         }
-        //     }
-        //     scanner = barcodeManager.getDevice(scannerToActivate);
-        //     scanner.addDataListener(this);
-        //     scanner.addStatusListener(this);
+            // scanner
+            List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
+            Iterator<ScannerInfo> it = scannersOnDevice.iterator();
+            ScannerInfo scannerToActivate = null;
+            while (it.hasNext()) {
+                ScannerInfo scnInfo = it.next();
+                if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
+                    scannerToActivate = scnInfo;
+                    break;
+                }
+            }
+            scanner = barcodeManager.getDevice(scannerToActivate);
+            scanner.addDataListener(this);
+            scanner.addStatusListener(this);
 
-        //     try {
-        //         scanner.enable();
+            try {
+                scanner.enable();
 
-        //         Log.i(LOG_TAG, "Scanner enabled");
-        //         if (initialisationCallbackContext != null) {
-        //             initialisationCallbackContext.success();
-        //             initialisationCallbackContext = null;
-        //         }
-        //     } catch (ScannerException e) {
-        //         Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
-        //         if (initialisationCallbackContext != null) {
-        //             OnScanFailCallback(initialisationCallbackContext, "Error in enabling Scanner: " + e.getMessage());
-        //         }
-        //     }
-        // } else {
-        //     Log.i(LOG_TAG, "Already initialized");
-        // }
+                Log.i(LOG_TAG, "Scanner enabled");
+                if (initialisationCallbackContext != null) {
+                    initialisationCallbackContext.success();
+                    initialisationCallbackContext = null;
+                }
+            } catch (ScannerException e) {
+                Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
+                if (initialisationCallbackContext != null) {
+                    OnScanFailCallback(initialisationCallbackContext, "Error in enabling Scanner: " + e.getMessage());
+                }
+            }
+        } else {
+            Log.i(LOG_TAG, "Already initialized");
+        }
        
     }
 
@@ -231,23 +286,28 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     // LOCAL METHODS
     //------------------------------------------------------------------------------------------------------------------
         private void deinit() {
-          try {    
-            if (scanner != null) {
-                // releases the scanner hardware resources for other application
-                // to use. You must call this as soon as you're done with the
-                // scanning.
-                scanner.cancelRead();
-                scanner.removeDataListener(this);
-                scanner.removeStatusListener(this);
-                scanner.disable();
-                scanner.release();
-                scanner = null;
+         if (scanner != null) {
 
-                emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+            try {
+                    
+                scanner.cancelRead();
+                scanner.disable();                  
+                
+            } catch (ScannerException e) {
+                
+                textViewStatus.setText("Status: " + e.getMessage());
+            }           
+            scanner.removeDataListener(this);
+            scanner.removeStatusListener(this);
+            try{
+                scanner.release();
+            } catch (ScannerException e) {
+                
+                textViewStatus.setText("Status: " + e.getMessage());
             }
-          } catch (ScannerException e) {
-            e.printStackTrace();
-          }
+            
+            scanner = null;
+        }
         }
 
     private void initializeScanner() {
