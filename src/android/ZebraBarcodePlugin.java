@@ -69,18 +69,17 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         // The application is in background
         
         // De-initialize scanner
-        deInitScanner();
+        deinit();
         
         // Remove connection listener
         if (barcodeManager != null) {
             barcodeManager.removeConnectionListener(this);
             barcodeManager = null;
-            deviceList = null;
         }
         
         // Release the barcode manager resources
         if (emdkManager != null) {
-            emdkManager.release(FEATURE_TYPE.BARCODE);
+            emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
         }
     }
 
@@ -89,7 +88,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         
         // Acquire the barcode manager resources
         if (emdkManager != null) {
-            barcodeManager = (BarcodeManager) emdkManager.getInstance(FEATURE_TYPE.BARCODE);
+            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
             
             // Add connection listener
             if (barcodeManager != null) {
@@ -97,9 +96,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             }        
             
             // Initialize scanner
-            initScanner();
-            setTrigger();
-            setDecoders();
+            initializeScanner();            
         }
     }
 
@@ -240,7 +237,7 @@ if (scanner == null || !scanner.isEnabled()) {
 
             // managers
             emdkManager = manager;            
-            barcodeManager = (BarcodeManager) emdkManager.getInstance(FEATURE_TYPE.BARCODE);
+            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
             // scanner
             List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
@@ -290,16 +287,12 @@ if (scanner == null || !scanner.isEnabled()) {
                 scanner.disable();                  
                 
             } catch (ScannerException e) {
-                
-                textViewStatus.setText("Status: " + e.getMessage());
-            }           
+                            }           
             scanner.removeDataListener(this);
             scanner.removeStatusListener(this);
             try{
                 scanner.release();
-            } catch (ScannerException e) {
-                
-                textViewStatus.setText("Status: " + e.getMessage());
+            } catch (ScannerException e) {                
             }
             
             scanner = null;
