@@ -29,7 +29,10 @@ function ZebraBarcodePlugin () {
 
 ZebraBarcodePlugin.prototype.startHardKeyRead = function (successCallback, errorCallback) {
 	argscheck.checkArgs('fF', 'ZebraBarcodePlugin.startHardRead', arguments);
-	exec(successCallback, errorCallback, "ZebraBarcodePlugin", "startHardKeyRead", []);
+	exec(function () {}, function () {}, "ZebraBarcodePlugin", "reinit", []);
+	setTimeout(function() {
+		exec(successCallback, errorCallback, "ZebraBarcodePlugin", "startHardKeyRead", []);
+	}, 500);	
 };
 
 ZebraBarcodePlugin.prototype.startSoftKeyRead = function (successCallback, errorCallback) {
