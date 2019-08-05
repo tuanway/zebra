@@ -175,7 +175,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 }
     
     @Override
-    protected void onStop() {
+    public void onStop() {
     // TODO Auto-generated method stub
     super.onStop();
     try {
