@@ -168,7 +168,7 @@ protected void onStop() {
         scanner.disable();
         scanner = null;
 
-        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+        emdkManager.release();
 
     }
   } catch (ScannerException e) {
@@ -180,7 +180,7 @@ protected void onStop() {
     public void onClosed() {
     /* EMDKManager is closed abruptly. Call EmdkManager.release() to free the  resources used by the current EMDK instance. */
     if (emdkManager != null) {
-        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+        emdkManager.release();
         emdkManager = null;
     }
     }
