@@ -70,12 +70,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         
         // De-initialize scanner
         deinit();
-        
-        // Remove connection listener
-        if (barcodeManager != null) {
-            barcodeManager.removeConnectionListener(this);
-            barcodeManager = null;
-        }
+                
         
         // Release the barcode manager resources
         if (emdkManager != null) {
@@ -88,12 +83,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         
         // Acquire the barcode manager resources
         if (emdkManager != null) {
-            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
-            
-            // Add connection listener
-            if (barcodeManager != null) {
-                barcodeManager.addConnectionListener(this);
-            }        
+            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);                        
             
             // Initialize scanner
             initializeScanner();            
@@ -217,11 +207,6 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     public void onClosed() {
     if (emdkManager != null) {
             
-            // Remove connection listener
-            if (barcodeManager != null){
-                barcodeManager.removeConnectionListener(this);
-                barcodeManager = null;
-            }
             
             // Release all the resources
             emdkManager.release();
