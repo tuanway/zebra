@@ -123,32 +123,15 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             Log.d(LOG_TAG, "DE_INIT SCANNER");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {                    
-                    deinit();
+                    onPause();
                 }
             });
         }else if (action.equalsIgnoreCase(RE_INIT)) {
             Log.d(LOG_TAG, "RE_INIT SCANNER");
             final ZebraBarcodePlugin me = this;
             cordova.getThreadPool().execute(new Runnable() {
-                public void run() {
-                       initialisationCallbackContext = callbackContext;
-
-                        try {
-                            EMDKResults results = EMDKManager.getEMDKManager(cordova.getActivity().getApplicationContext(), me);
-
-                            if (results.statusCode == EMDKResults.STATUS_CODE.SUCCESS) {
-                                Log.i(LOG_TAG, "EMDK manager has been created");
-                                callbackContext.success();
-                            } else {
-                                Log.w(LOG_TAG, "EMDKManager creation failed.  EMDK will not be available");
-                                OnScanFailCallback(callbackContext, "EMDKManager creation failed.");
-                            }
-                        } catch (NoClassDefFoundError e) {
-                            Log.w(LOG_TAG, "EMDK is not available on this device");
-                            OnScanFailCallback(callbackContext, "EMDK is not available on this device");
-                        }
-
-                    initializeScanner();
+                public void run() {                       
+                     onResume();
                 }
             });
         } else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
