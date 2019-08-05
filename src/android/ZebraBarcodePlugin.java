@@ -158,8 +158,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     //------------------------------------------------------------------------------------------------------------------
 
     private void deinit() {
-  try {
-    try{Thread.sleep(1000);}catch(InterruptedException e){}  
+  try {    
     if (scanner != null) {
         // releases the scanner hardware resources for other application
         // to use. You must call this as soon as you're done with the
@@ -296,7 +295,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     private void StartReadingBarcode(String type, CallbackContext callbackContext) {
         initializeScanner();       
-        try{Thread.sleep(1000);}catch(InterruptedException e){}   
+        try{Thread.sleep(500);}catch(InterruptedException e){}   
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
             try {                
