@@ -45,8 +45,8 @@ ZebraBarcodePlugin.prototype.enableReading = function () {
 	exec(function () {}, function () {}, "ZebraBarcodePlugin", "enableReading", []);
 };
 
-ZebraBarcodePlugin.prototype.init = function () {
-	exec(function () {}, function () {}, "ZebraBarcodePlugin", "init", []);
+ZebraBarcodePlugin.prototype.reinit = function () {
+	exec(function () {}, function () {}, "ZebraBarcodePlugin", "reinit", []);
 };
 
 ZebraBarcodePlugin.prototype.deinit = function () {

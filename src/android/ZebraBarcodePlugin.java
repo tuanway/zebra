@@ -44,6 +44,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     private static String START_HARD_KEY = "startHardKeyRead";
     private static String STOP_READING = "stopReading";
     private static String DE_INIT = "deinit";
+    private static String RE_INIT = "reinit";
 
     public ZebraBarcodePlugin() {
     }
@@ -95,7 +96,14 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             Log.d(LOG_TAG, "DE_INIT SCANNER");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {                    
-                    onClosed();
+                    deInitScanner();
+                }
+            });
+        }else if (action.equalsIgnoreCase(RE_INIT)) {
+            Log.d(LOG_TAG, "RE_INIT SCANNER");
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {                    
+                    initializeScanner();
                 }
             });
         } else if (action.equalsIgnoreCase(START_SOFT_KEY)) {
@@ -194,6 +202,66 @@ public void onClosed() {
     //------------------------------------------------------------------------------------------------------------------
     // LOCAL METHODS
     //------------------------------------------------------------------------------------------------------------------
+
+
+    private void deInitScanner() {
+        if (scanner != null) {
+    try {
+        scanner.cancelRead();
+        scanner.removeDataListener(this);
+        scanner.removeStatusListener(this);
+        scanner.disable();
+
+    } catch (ScannerException e) {
+        // TODO Auto-generated catch block
+        statusTextView.setText("Status: " + e.getMessage());
+    }
+    scanner = null;
+}
+    }
+
+    private void initializeScanner() throws ScannerException {
+
+     Log.i(LOG_TAG, "EMDKManager onOpened Method Called");
+if (scanner == null || !scanner.isEnabled()) {
+            Log.i(LOG_TAG, "Initializing EMDKManager");
+
+            // managers
+            BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+
+            // scanner
+            List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
+            Iterator<ScannerInfo> it = scannersOnDevice.iterator();
+            ScannerInfo scannerToActivate = null;
+            while (it.hasNext()) {
+                ScannerInfo scnInfo = it.next();
+                if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
+                    scannerToActivate = scnInfo;
+                    break;
+                }
+            }
+            scanner = barcodeManager.getDevice(scannerToActivate);
+            scanner.addDataListener(this);
+            scanner.addStatusListener(this);
+
+            try {
+                scanner.enable();
+
+                Log.i(LOG_TAG, "Scanner enabled");
+                if (initialisationCallbackContext != null) {
+                    initialisationCallbackContext.success();
+                    initialisationCallbackContext = null;
+                }
+            } catch (ScannerException e) {
+                Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
+                if (initialisationCallbackContext != null) {
+                    OnScanFailCallback(initialisationCallbackContext, "Error in enabling Scanner: " + e.getMessage());
+                }
+            }
+        } else {
+            Log.i(LOG_TAG, "Already initialized");
+        }
+}
 
     private void StartReadingBarcode(String type, CallbackContext callbackContext) {
         Log.e(LOG_TAG, "StartRead: " + type);
