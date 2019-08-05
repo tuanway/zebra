@@ -101,8 +101,26 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             });
         }else if (action.equalsIgnoreCase(RE_INIT)) {
             Log.d(LOG_TAG, "RE_INIT SCANNER");
+            final ZebraBarcodePlugin me = this;
             cordova.getThreadPool().execute(new Runnable() {
-                public void run() {                    
+                public void run() {
+                       initialisationCallbackContext = callbackContext;
+
+                        try {
+                            EMDKResults results = EMDKManager.getEMDKManager(cordova.getActivity().getApplicationContext(), me);
+
+                            if (results.statusCode == EMDKResults.STATUS_CODE.SUCCESS) {
+                                Log.i(LOG_TAG, "EMDK manager has been created");
+                                callbackContext.success();
+                            } else {
+                                Log.w(LOG_TAG, "EMDKManager creation failed.  EMDK will not be available");
+                                OnScanFailCallback(callbackContext, "EMDKManager creation failed.");
+                            }
+                        } catch (NoClassDefFoundError e) {
+                            Log.w(LOG_TAG, "EMDK is not available on this device");
+                            OnScanFailCallback(callbackContext, "EMDK is not available on this device");
+                        }
+
                     initializeScanner();
                 }
             });
@@ -141,7 +159,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     private void deinit() {
   try {
-    try{Thread.sleep(2000);}catch(InterruptedException e){}  
+    try{Thread.sleep(1000);}catch(InterruptedException e){}  
     if (scanner != null) {
         // releases the scanner hardware resources for other application
         // to use. You must call this as soon as you're done with the
@@ -246,7 +264,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                     initialisationCallbackContext.success();
                     initialisationCallbackContext = null;
                 }
-                 try{Thread.sleep(2000);}catch(InterruptedException e){}  
+                 try{Thread.sleep(1000);}catch(InterruptedException e){}  
             } catch (ScannerException e) {
                 Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
                 if (initialisationCallbackContext != null) {
