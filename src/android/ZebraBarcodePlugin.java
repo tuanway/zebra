@@ -194,8 +194,7 @@ public void onStop() {
     @Override
 public void onClosed() {
         emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
-        emdkManager = null;
-        scanner = null;
+        emdkManager = null;        
     }
 
 

@@ -49,6 +49,10 @@ ZebraBarcodePlugin.prototype.reinit = function () {
 	exec(function () {}, function () {}, "ZebraBarcodePlugin", "reinit", []);
 };
 
+ZebraBarcodePlugin.prototype.init = function () {
+	exec(function () {}, function () {}, "ZebraBarcodePlugin", "init", []);
+};
+
 ZebraBarcodePlugin.prototype.deinit = function () {
 	exec(function () {}, function () {}, "ZebraBarcodePlugin", "deinit", []);
 };
