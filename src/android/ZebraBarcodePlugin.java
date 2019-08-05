@@ -308,8 +308,7 @@ if (scanner == null || !scanner.isEnabled()) {
         }
 }
 
-    private void StartReadingBarcode(String type, CallbackContext callbackContext) {
-        initializeScanner();       
+    private void StartReadingBarcode(String type, CallbackContext callbackContext) {        
         try{Thread.sleep(1500);}catch(InterruptedException e){}   
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
@@ -341,8 +340,7 @@ if (scanner == null || !scanner.isEnabled()) {
         scanCallbackContext = null;
         if (scanner != null && scanner.isReadPending()) {
             try {
-                scanner.cancelRead();     
-                deinit();           
+                scanner.cancelRead();                     
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "Error stopping read");
             }
@@ -404,8 +402,7 @@ if (scanner == null || !scanner.isEnabled()) {
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "JSON Error");
             }
-            callbackContext.error(failureMessage);
-            deinit();
+            callbackContext.error(failureMessage);            
         }
     }
 
