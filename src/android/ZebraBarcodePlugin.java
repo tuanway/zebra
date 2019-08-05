@@ -258,7 +258,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     private void StartReadingBarcode(String type, CallbackContext callbackContext) {
         initializeScanner();
-
+        Thread.sleep(2000);
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
             try {                
@@ -277,11 +277,13 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "error: " + e.getMessage());
                 OnScanFailCallback(callbackContext, "Error in enabling read: " + e.getMessage());
+                Thread.sleep(2000);
                 deinit();
             }
         } else {
             Log.e(LOG_TAG, "error: Scanner is not enabled");
             OnScanFailCallback(callbackContext, "Scanner is not enabled");
+            Thread.sleep(2000);
             deinit();
         }
 
