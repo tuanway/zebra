@@ -275,7 +275,6 @@ if (scanner == null || !scanner.isEnabled()) {
                 }
                 Log.e(LOG_TAG, "start");
                 scanCallbackContext = callbackContext;
-                scanner.enable();
                 scanner.read();
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "error: " + e.getMessage());
