@@ -169,6 +169,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         scanner.disable();
         scanner.release();
         scanner = null;
+
         emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
     }
   } catch (ScannerException e) {
@@ -197,11 +198,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     @Override
     public void onClosed() {
-    /* EMDKManager is closed abruptly. Call EmdkManager.release() to free the resources used by the current EMDK instance. */
-    if (emdkManager != null) {
-        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
-        emdkManager = null;
-    }
+    /* EMDKManager is closed abruptly. Call EmdkManager.release() to free the resources used by the current EMDK instance. */   
     }
 
     @Override
