@@ -219,7 +219,7 @@ public void onClosed() {
 }
     }
 
-    private void initializeScanner() throws ScannerException {
+    private void initializeScanner() {
 
      Log.i(LOG_TAG, "EMDKManager onOpened Method Called");
 if (scanner == null || !scanner.isEnabled()) {
