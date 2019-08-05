@@ -325,7 +325,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             deinit();
         }
 
-        
+        deinit();
     }
 
     private void StopReadingBarcode() {
