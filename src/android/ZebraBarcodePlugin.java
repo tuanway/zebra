@@ -65,8 +65,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         }
     }
 
-    public void onPause() {
-        super.onPause();
+    public void onPause() {        
         // The application is in background
         
         // De-initialize scanner
@@ -85,8 +84,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         }
     }
 
-    public void onResume() {
-        super.onResume();
+    public void onResume() {        
         // The application is in foreground 
         
         // Acquire the barcode manager resources
