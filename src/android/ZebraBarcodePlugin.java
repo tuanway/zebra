@@ -138,6 +138,15 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     //------------------------------------------------------------------------------------------------------------------
     // EMDK MANAGER
     //------------------------------------------------------------------------------------------------------------------
+   
+   @Override
+    public void onClosed() {
+    /* EMDKManager is closed abruptly. Call EmdkManager.release() to free the  resources used by the current EMDK instance. */
+    if (emdkManager != null) {
+        emdkManager.release();
+        emdkManager = null;
+    }
+    }
 
     @Override
     public void onOpened(EMDKManager manager) {
