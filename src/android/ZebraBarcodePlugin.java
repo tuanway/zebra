@@ -141,6 +141,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     private void deinit() {
   try {
+    Thread.sleep(2000);
     if (scanner != null) {
         // releases the scanner hardware resources for other application
         // to use. You must call this as soon as you're done with the
@@ -245,6 +246,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                     initialisationCallbackContext.success();
                     initialisationCallbackContext = null;
                 }
+
+                Thread.sleep(2000);
             } catch (ScannerException e) {
                 Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
                 if (initialisationCallbackContext != null) {
@@ -257,8 +260,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 }
 
     private void StartReadingBarcode(String type, CallbackContext callbackContext) {
-        initializeScanner();
-        Thread.sleep(2000);
+        initializeScanner();        
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
             try {                
@@ -276,14 +278,12 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                 scanner.read();
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "error: " + e.getMessage());
-                OnScanFailCallback(callbackContext, "Error in enabling read: " + e.getMessage());
-                Thread.sleep(2000);
+                OnScanFailCallback(callbackContext, "Error in enabling read: " + e.getMessage());                
                 deinit();
             }
         } else {
             Log.e(LOG_TAG, "error: Scanner is not enabled");
-            OnScanFailCallback(callbackContext, "Scanner is not enabled");
-            Thread.sleep(2000);
+            OnScanFailCallback(callbackContext, "Scanner is not enabled");            
             deinit();
         }
 
