@@ -208,8 +208,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             // Log.i(LOG_TAG, "Initializing EMDKManager");
 
             // managers
-            emdkManager = manager;
-            initializeScanner();
+            emdkManager = manager;            
         //     BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
         //     // scanner
