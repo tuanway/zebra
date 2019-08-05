@@ -96,7 +96,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
             Log.d(LOG_TAG, "DE_INIT SCANNER");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {                    
-                    onStop();
+                    deinit();
                 }
             });
         }else if (action.equalsIgnoreCase(RE_INIT)) {
@@ -140,8 +140,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     //------------------------------------------------------------------------------------------------------------------
 
    @Override
-    protected void onStop() {
-  super.onStop();
+    private void deinit() {
   try {
     if (scanner != null) {
         // releases the scanner hardware resources for other application
