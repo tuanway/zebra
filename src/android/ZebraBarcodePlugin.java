@@ -65,8 +65,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         }
     }
 
-    @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         // The application is in background
         
@@ -86,8 +85,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         }
     }
 
-    @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         // The application is in foreground 
         
