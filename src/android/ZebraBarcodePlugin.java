@@ -224,7 +224,7 @@ if (scanner == null || !scanner.isEnabled()) {
             //         break;
             //     }
             // }
-            scanner = barcodeManager.getDevice(scannerToActivate);
+            // scanner = barcodeManager.getDevice(scannerToActivate);
             // scanner.addDataListener(this);
             // scanner.addStatusListener(this);
 
