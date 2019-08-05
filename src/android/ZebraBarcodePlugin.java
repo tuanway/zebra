@@ -173,12 +173,31 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     e.printStackTrace();
   }
 }
+    
+    @Override
+    protected void onStop() {
+    // TODO Auto-generated method stub
+    super.onStop();
+    try {
+    if (scanner != null) {
+        // releases the scanner hardware resources for other application
+        // to use. You must call this as soon as you're done with the
+        // scanning.
+        scanner.removeDataListener(this);
+        scanner.removeStatusListener(this);
+        scanner.disable();
+        scanner = null;
+    }
+    } catch (ScannerException e) {
+    e.printStackTrace();
+    }
+    }
 
     @Override
     public void onClosed() {
     /* EMDKManager is closed abruptly. Call EmdkManager.release() to free the resources used by the current EMDK instance. */
     if (emdkManager != null) {
-        emdkManager.release();
+        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
         emdkManager = null;
     }
     }
@@ -263,8 +282,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                 if (initialisationCallbackContext != null) {
                     initialisationCallbackContext.success();
                     initialisationCallbackContext = null;
-                }
-                 try{Thread.sleep(1000);}catch(InterruptedException e){}  
+                }                 
             } catch (ScannerException e) {
                 Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
                 if (initialisationCallbackContext != null) {
@@ -277,7 +295,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 }
 
     private void StartReadingBarcode(String type, CallbackContext callbackContext) {
-        initializeScanner();        
+        initializeScanner();       
+        try{Thread.sleep(1000);}catch(InterruptedException e){}   
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
             try {                
