@@ -184,18 +184,6 @@ if (scanner == null || !scanner.isEnabled()) {
        
     }
 
-    @Override
-public void onStop() {
-    
-}
-
-    // necessary to be compliant with the EMDKListener interface
-    @Override
-public void onClosed() {
-        // emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
-        // emdkManager = null;        
-    }
-
 
     //------------------------------------------------------------------------------------------------------------------
     // LOCAL METHODS
@@ -219,7 +207,7 @@ public void onClosed() {
 
     private void initializeScanner() {
 
-     Log.i(LOG_TAG, "EMDKManager onOpened Method Called");
+     Log.i(LOG_TAG, "EMDKManager initializeScanner Method Called");
 if (scanner == null || !scanner.isEnabled()) {
             Log.i(LOG_TAG, "Initializing EMDKManager");
             // managers
