@@ -167,8 +167,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     @Override
     public void onOpened(EMDKManager manager) {
         Log.i(LOG_TAG, "EMDKManager onOpened Method Called");
-if (scanner == null || !scanner.isEnabled()) {
-            Log.i(LOG_TAG, "Initializing EMDKManager");
+// if (scanner == null || !scanner.isEnabled()) {
+            // Log.i(LOG_TAG, "Initializing EMDKManager");
 
             // managers
             emdkManager = manager;
