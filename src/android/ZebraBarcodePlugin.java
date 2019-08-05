@@ -156,26 +156,6 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     //------------------------------------------------------------------------------------------------------------------
     // EMDK MANAGER
     //------------------------------------------------------------------------------------------------------------------
-
-    private void deinit() {
-  try {    
-    if (scanner != null) {
-        // releases the scanner hardware resources for other application
-        // to use. You must call this as soon as you're done with the
-        // scanning.
-        scanner.cancelRead();
-        scanner.removeDataListener(this);
-        scanner.removeStatusListener(this);
-        scanner.disable();
-        scanner.release();
-        scanner = null;
-
-        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
-    }
-  } catch (ScannerException e) {
-    e.printStackTrace();
-  }
-}
     
     @Override
     public void onStop() {
@@ -250,7 +230,25 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     //------------------------------------------------------------------------------------------------------------------
     // LOCAL METHODS
     //------------------------------------------------------------------------------------------------------------------
+        private void deinit() {
+          try {    
+            if (scanner != null) {
+                // releases the scanner hardware resources for other application
+                // to use. You must call this as soon as you're done with the
+                // scanning.
+                scanner.cancelRead();
+                scanner.removeDataListener(this);
+                scanner.removeStatusListener(this);
+                scanner.disable();
+                scanner.release();
+                scanner = null;
 
+                emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+            }
+          } catch (ScannerException e) {
+            e.printStackTrace();
+          }
+        }
 
     private void initializeScanner() {
      Log.i(LOG_TAG, "EMDKManager initializeScanner Method Called");
@@ -295,7 +293,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     private void StartReadingBarcode(String type, CallbackContext callbackContext) {
         initializeScanner();       
-        try{Thread.sleep(500);}catch(InterruptedException e){}   
+        try{Thread.sleep(1500);}catch(InterruptedException e){}   
         Log.e(LOG_TAG, "StartRead: " + type);
         if (scanner != null) {
             try {                
