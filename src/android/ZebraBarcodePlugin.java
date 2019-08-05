@@ -36,6 +36,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
     private EMDKManager emdkManager = null;             ///<  If the EMDK is available for scanning, this property will be non-null
     private Scanner scanner = null;                         ///<  The scanner currently in use
+    private Scanner.DataListener dl;
+    private Scanner.StatusListener sl;
     private CallbackContext initialisationCallbackContext = null;   ///<  The Cordova callback for our first plugin initialisation
     private CallbackContext scanCallbackContext = null;     ///<  The Cordova callback context for each scan
     private static String SOFT_KEY = "soft_key";
@@ -163,8 +165,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         // releases the scanner hardware resources for other application
         // to use. You must call this as soon as you're done with the
         // scanning.
-        scanner.removeDataListener(this);
-        scanner.removeStatusListener(this);
+        scanner.removeDataListener(dl);
+        scanner.removeStatusListener(sl);
         scanner.disable();
         scanner = null;
     }
@@ -182,8 +184,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         // releases the scanner hardware resources for other application
         // to use. You must call this as soon as you're done with the
         // scanning.
-        scanner.removeDataListener(this);
-        scanner.removeStatusListener(this);
+        scanner.removeDataListener(dl);
+        scanner.removeStatusListener(sl);
         scanner.disable();
         scanner = null;
     }
@@ -209,6 +211,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
 
             // managers
             emdkManager = manager;
+            initializeScanner();
         //     BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
         //     // scanner
@@ -271,8 +274,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                 }
             }
             scanner = barcodeManager.getDevice(scannerToActivate);
-            scanner.addDataListener(this);
-            scanner.addStatusListener(this);
+            scanner.addDataListener(dl);
+            scanner.addStatusListener(sl);
 
             try {
                 scanner.enable();
