@@ -186,15 +186,14 @@ if (scanner == null || !scanner.isEnabled()) {
 
     @Override
 public void onStop() {
-    super.onStop();
-    onClosed();
+    
 }
 
     // necessary to be compliant with the EMDKListener interface
     @Override
 public void onClosed() {
-        emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
-        emdkManager = null;        
+        // emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+        // emdkManager = null;        
     }
 
 
