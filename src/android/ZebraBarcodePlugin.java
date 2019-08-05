@@ -139,7 +139,6 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     // EMDK MANAGER
     //------------------------------------------------------------------------------------------------------------------
 
-   @Override
     private void deinit() {
   try {
     if (scanner != null) {
