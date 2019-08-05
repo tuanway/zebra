@@ -223,7 +223,6 @@ public void onClosed() {
      Log.i(LOG_TAG, "EMDKManager onOpened Method Called");
 if (scanner == null || !scanner.isEnabled()) {
             Log.i(LOG_TAG, "Initializing EMDKManager");
-
             // managers
             BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
@@ -244,17 +243,9 @@ if (scanner == null || !scanner.isEnabled()) {
 
             try {
                 scanner.enable();
-
-                Log.i(LOG_TAG, "Scanner enabled");
-                if (initialisationCallbackContext != null) {
-                    initialisationCallbackContext.success();
-                    initialisationCallbackContext = null;
-                }
+                Log.i(LOG_TAG, "Scanner enabled");              
             } catch (ScannerException e) {
-                Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
-                if (initialisationCallbackContext != null) {
-                    OnScanFailCallback(initialisationCallbackContext, "Error in enabling Scanner: " + e.getMessage());
-                }
+                Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());             
             }
         } else {
             Log.i(LOG_TAG, "Already initialized");
