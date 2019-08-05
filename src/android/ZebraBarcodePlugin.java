@@ -316,16 +316,12 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                 scanner.read();
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "error: " + e.getMessage());
-                OnScanFailCallback(callbackContext, "Error in enabling read: " + e.getMessage());                
-                deinit();
+                OnScanFailCallback(callbackContext, "Error in enabling read: " + e.getMessage());                                
             }
         } else {
             Log.e(LOG_TAG, "error: Scanner is not enabled");
-            OnScanFailCallback(callbackContext, "Scanner is not enabled");            
-            deinit();
-        }
-
-        deinit();
+            OnScanFailCallback(callbackContext, "Scanner is not enabled");                        
+        }        
     }
 
     private void StopReadingBarcode() {
@@ -333,7 +329,8 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         scanCallbackContext = null;
         if (scanner != null && scanner.isReadPending()) {
             try {
-                scanner.cancelRead();                
+                scanner.cancelRead();     
+                deinit();           
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "Error stopping read");
             }
@@ -373,8 +370,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
         StatusData.ScannerStates state = statusData.getState();
         Log.d(LOG_TAG, "Scanner State Change: " + state);
         if (state.equals(StatusData.ScannerStates.IDLE) && scanCallbackContext != null && !scanner.isReadPending()) {
-            try {
-                scanner.enable();
+            try {                
                 scanner.read();
             } catch (ScannerException e) {
                 Log.e(LOG_TAG, "Cannot revive read: " + e.getMessage());
@@ -397,6 +393,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
                 Log.e(LOG_TAG, "JSON Error");
             }
             callbackContext.error(failureMessage);
+            deinit();
         }
     }
 
