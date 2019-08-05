@@ -194,14 +194,14 @@ if (scanner == null || !scanner.isEnabled()) {
         if (scanner != null) {
     try {
         scanner.cancelRead();
-        scanner.removeDataListener(this);
-        scanner.removeStatusListener(this);
+        // scanner.removeDataListener(this);
+        // scanner.removeStatusListener(this);
         scanner.disable();
 
     } catch (ScannerException e) {
         Log.i(LOG_TAG, "Status: " + e.getMessage());
     }
-    scanner = null;
+    // scanner = null;
 }
     }
 
@@ -209,24 +209,24 @@ if (scanner == null || !scanner.isEnabled()) {
 
      Log.i(LOG_TAG, "EMDKManager initializeScanner Method Called");
 if (scanner == null || !scanner.isEnabled()) {
-            Log.i(LOG_TAG, "Initializing EMDKManager");
-            // managers
-            BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+            // Log.i(LOG_TAG, "Initializing EMDKManager");
+            // // managers
+            // BarcodeManager barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
 
-            // scanner
-            List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
-            Iterator<ScannerInfo> it = scannersOnDevice.iterator();
-            ScannerInfo scannerToActivate = null;
-            while (it.hasNext()) {
-                ScannerInfo scnInfo = it.next();
-                if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
-                    scannerToActivate = scnInfo;
-                    break;
-                }
-            }
+            // // scanner
+            // List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
+            // Iterator<ScannerInfo> it = scannersOnDevice.iterator();
+            // ScannerInfo scannerToActivate = null;
+            // while (it.hasNext()) {
+            //     ScannerInfo scnInfo = it.next();
+            //     if (scnInfo.getFriendlyName().equalsIgnoreCase("2D Barcode Imager")) { // always use the "2D Barcode Imager"
+            //         scannerToActivate = scnInfo;
+            //         break;
+            //     }
+            // }
             scanner = barcodeManager.getDevice(scannerToActivate);
-            scanner.addDataListener(this);
-            scanner.addStatusListener(this);
+            // scanner.addDataListener(this);
+            // scanner.addStatusListener(this);
 
             try {
                 scanner.enable();
