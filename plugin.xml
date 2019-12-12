@@ -19,6 +19,6 @@
 		</config-file>
 		<framework src="src/android/extras.gradle" custom="true" type="gradleReference" />
 		<source-file src="src/android/ZebraBarcodePlugin.java" target-dir="src/com/jkt/zebra/barcode/plugin" />
-		<source-file src="src/android/com.symbol.emdk.jar" target-dir="lib" />
+		
 	</platform>
 </plugin>
