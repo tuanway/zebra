@@ -1,3 +1,4 @@
 dependencies {
    provided files('lib/com.symbol.emdk.jar')
+   compile fileTree(exclude: ['libs/com.symbol.emdk.jar'],include: ['*.jar'], dir: 'libs')
 }
