@@ -18,7 +18,8 @@
 			<uses-library android:name="com.symbol.emdk" android:required="false" />
 		</config-file>
 		<framework src="src/android/extras.gradle" custom="true" type="gradleReference" />
-		<source-file src="src/android/ZebraBarcodePlugin.java" target-dir="src/com/jkt/zebra/barcode/plugin" />		
+		<source-file src="src/android/ZebraBarcodePlugin.java" target-dir="src/com/jkt/zebra/barcode/plugin" />	
+		<source-file src="src/android/com.symbol.emdk.jar" target-dir="src/com/jkt/zebra/barcode/plugin" />		
 		<lib-file src="src/android/com.symbol.emdk.jar" />
 	</platform>
 </plugin>
