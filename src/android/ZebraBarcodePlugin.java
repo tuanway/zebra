@@ -253,11 +253,11 @@ if (scanner == null || !scanner.isEnabled()) {
                     
                 scanner.cancelRead();
                 scanner.disable();                  
-                
+                scanner.removeDataListener(this);
+            	scanner.removeStatusListener(this);
             } catch (ScannerException e) {
-                            }           
-            scanner.removeDataListener(this);
-            scanner.removeStatusListener(this);
+
+                            }                       
             try{
                 scanner.release();
             } catch (ScannerException e) {                
@@ -269,8 +269,9 @@ if (scanner == null || !scanner.isEnabled()) {
 
     private void initializeScanner() {
      Log.i(LOG_TAG, "EMDKManager initializeScanner Method Called");
-    if (true) {          
-            // scanner
+    if (true) {                      
+            try {
+            	// scanner
             List<ScannerInfo> scannersOnDevice = barcodeManager.getSupportedDevicesInfo();
             Iterator<ScannerInfo> it = scannersOnDevice.iterator();
             ScannerInfo scannerToActivate = null;
@@ -285,8 +286,7 @@ if (scanner == null || !scanner.isEnabled()) {
             scanner.addDataListener(this);
             scanner.addStatusListener(this);
 
-            try {
-                scanner.enable();
+            scanner.enable();
 
                 Log.i(LOG_TAG, "Scanner enabled");
                 if (initialisationCallbackContext != null) {
