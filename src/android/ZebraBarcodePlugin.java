@@ -67,6 +67,9 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     }
 
     public void onPause() {        
+    	if (isResuming == true) {
+    		return;
+    	}
         // The application is in background
         
         // De-initialize scanner
