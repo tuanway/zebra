@@ -46,6 +46,7 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     private static String STOP_READING = "stopReading";
     private static String DE_INIT = "deinit";
     private static String RE_INIT = "reinit";
+    private static Boolean isResuming = false;
 
     public ZebraBarcodePlugin() {
     }
@@ -79,8 +80,12 @@ public class ZebraBarcodePlugin extends CordovaPlugin implements Serializable, E
     }
 
     public void onResume() {        
+    	if (isResuming == true) {
+    		return;
+    	}
         // The application is in foreground 
-        
+        isResuming = true;
+
         // Acquire the barcode manager resources
         if (emdkManager != null) {
             barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);                        
@@ -293,6 +298,7 @@ if (scanner == null || !scanner.isEnabled()) {
                     initialisationCallbackContext.success();
                     initialisationCallbackContext = null;
                 }                 
+                isResuming = false;
             } catch (ScannerException e) {
                 Log.i(LOG_TAG, "Error in enabling Scanner: " + e.getMessage());
                 if (initialisationCallbackContext != null) {
